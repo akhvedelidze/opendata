@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Research Assistant</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              200: '#bae6fd',
+              300: '#7dd3fc',
+              400: '#38bdf8',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1',
+              800: '#075985',
+              900: '#0c4a6e',
+            },
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: rgb(249, 250, 251);
+    }
+    .research-container {
+      max-width: 56rem;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+    .result-card {
+      background-color: white;
+      border-radius: 0.5rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      padding: 1.5rem;
+      margin: 1rem 0;
+    }
+    .search-input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid rgb(209, 213, 219);
+      border-radius: 0.5rem;
+    }
+    .search-input:focus {
+      outline: none;
+      ring: 2px;
+      ring-color: rgb(14, 165, 233);
+      border-color: transparent;
+    }
+    .button-primary {
+      background-color: rgb(2, 132, 199);
+      color: white;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      transition: background-color 0.2s;
+    }
+    .button-primary:hover {
+      background-color: rgb(3, 105, 161);
+    }
+    .loading-spinner {
+      animation: spin 1s linear infinite;
+      height: 1.25rem;
+      width: 1.25rem;
+      color: rgb(14, 165, 233);
+    }
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+    .result-heading {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: rgb(31, 41, 55);
+    }
+    .result-content {
+      color: rgb(31, 41, 55);
+      line-height: 1.75;
+      font-size: 1.125rem;
+    }
+    .result-content h1 {
+      font-size: 2.25rem;
+      font-weight: 800;
+      margin-top: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .result-content h2 {
+      font-size: 1.875rem;
+      font-weight: 700;
+      margin-top: 1.75rem;
+      margin-bottom: 1.25rem;
+    }
+    .result-content h3 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-top: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .result-content p {
+      margin-top: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+    .result-content a {
+      color: #0284c7;
+      text-decoration: underline;
+      font-weight: 500;
+    }
+    .result-content ul, .result-content ol {
+      margin-top: 1.25rem;
+      margin-bottom: 1.25rem;
+      padding-left: 2rem;
+    }
+    .result-content ul {
+      list-style-type: disc;
+    }
+    .result-content ol {
+      list-style-type: decimal;
+    }
+    .result-content li {
+      margin-top: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .citation {
+      font-size: 0.875rem;
+      color: rgb(75, 85, 99);
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="min-h-screen">
+    <header class="bg-white shadow-sm">
+      <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
+        <h1 class="text-lg font-medium text-primary-800">
+          Research Assistant
+        </h1>
+      </div>
+    </header>
+
+    <main class="research-container">
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl mb-2">
+          Research Assistant
+        </h1>
+        <p class="text-gray-600">
+          Enter your research question and get comprehensive answers from multiple sources.
+        </p>
+      </div>
+
+      <div class="mb-8">
+        <form id="searchForm" class="flex flex-col gap-4">
+          <div>
+            <label for="query" class="block text-lg font-medium text-gray-700 mb-2">
+              Research Question
+            </label>
+            <input
+              id="query"
+              type="text"
+              placeholder="Enter your research question..."
+              class="search-input"
+              autocomplete="off"
+            />
+          </div>
+          <div class="flex justify-end">
+            <button
+              type="submit"
+              class="button-primary"
+              id="searchButton"
+            >
+              Research
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div id="errorMessage" class="bg-red-50 border-l-4 border-red-500 p-4 mb-6 hidden">
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <svg
+              class="h-5 w-5 text-red-500"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm text-red-700" id="errorText"></p>
+          </div>
+        </div>
+      </div>
+
+      <div id="loadingIndicator" class="flex justify-center items-center py-12 hidden">
+        <svg class="animate-spin h-10 w-10 text-primary-600" fill="none" viewBox="0 0 24 24">
+          <circle
+            class="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            stroke-width="4"
+          />
+          <path
+            class="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+          />
+        </svg>
+        <span class="ml-3 text-lg text-gray-700">Researching...</span>
+      </div>
+
+      <div id="resultContainer" class="result-card hidden">
+        <h2 class="result-heading">Research Results</h2>
+        <div class="mb-4">
+          <div class="text-sm text-gray-500 mb-1">Query</div>
+          <div class="font-medium" id="resultQuery"></div>
+        </div>
+        
+        <div class="mb-6">
+          <div class="text-sm text-gray-500 mb-1">Answer</div>
+          <div class="result-content" id="resultAnswer"></div>
+        </div>
+        
+        <div class="border-t border-gray-200 pt-4">
+          <button
+            id="toggleSourcesButton"
+            class="text-primary-600 hover:text-primary-800 font-medium flex items-center"
+          >
+            Show Sources (<span id="sourcesCount">0</span>)
+            <svg
+              class="ml-1 h-4 w-4 transform transition-transform"
+              id="sourcesArrow"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </button>
+          
+          <div class="mt-4 space-y-4 hidden" id="sourcesList"></div>
+        </div>
+        
+        <div class="mt-6 text-xs text-gray-400 text-right" id="generatedTime"></div>
+      </div>
+    </main>
+
+    <footer class="bg-white border-t border-gray-200 mt-auto">
+      <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
+        <p class="text-center text-sm text-gray-500">
+          Powered by Perplexity AI and Serper API
+        </p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Include marked.js for markdown parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const searchForm = document.getElementById('searchForm');
+      const queryInput = document.getElementById('query');
+      const searchButton = document.getElementById('searchButton');
+      const errorMessage = document.getElementById('errorMessage');
+      const errorText = document.getElementById('errorText');
+      const loadingIndicator = document.getElementById('loadingIndicator');
+      const resultContainer = document.getElementById('resultContainer');
+      const resultQuery = document.getElementById('resultQuery');
+      const resultAnswer = document.getElementById('resultAnswer');
+      const toggleSourcesButton = document.getElementById('toggleSourcesButton');
+      const sourcesArrow = document.getElementById('sourcesArrow');
+      const sourcesList = document.getElementById('sourcesList');
+      const sourcesCount = document.getElementById('sourcesCount');
+      const generatedTime = document.getElementById('generatedTime');
+
+      let sources = [];
+      let showingSources = false;
+
+      searchForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const query = queryInput.value.trim();
+        
+        if (!query) {
+          showError('Please enter a research question');
+          return;
+        }
+
+        startSearch(query);
+      });
+
+      toggleSourcesButton.addEventListener('click', function() {
+        showingSources = !showingSources;
+        
+        if (showingSources) {
+          sourcesList.classList.remove('hidden');
+          toggleSourcesButton.textContent = 'Hide Sources ';
+          sourcesArrow.classList.add('rotate-180');
+        } else {
+          sourcesList.classList.add('hidden');
+          toggleSourcesButton.textContent = 'Show Sources ';
+          sourcesArrow.classList.remove('rotate-180');
+        }
+
+        // Add back the sources count and arrow
+        toggleSourcesButton.appendChild(document.createTextNode(`(${sources.length})`));
+        toggleSourcesButton.appendChild(sourcesArrow);
+      });
+
+      function startSearch(query) {
+        // Hide any previous results or errors
+        errorMessage.classList.add('hidden');
+        resultContainer.classList.add('hidden');
+        
+        // Show loading
+        loadingIndicator.classList.remove('hidden');
+        searchButton.disabled = true;
+
+        // THIS IS WHERE WE WOULD NORMALLY CALL THE API
+        // For demo purposes, we'll simulate a response after a delay
+        setTimeout(() => {
+          // Simulate API call
+          const mockResult = getMockResult(query);
+          displayResult(mockResult);
+        }, 2000);
+      }
+
+      function displayResult(result) {
+        // Hide loading
+        loadingIndicator.classList.add('hidden');
+        searchButton.disabled = false;
+        
+        // Store sources globally
+        sources = result.sources;
+        
+        // Fill in the result data
+        resultQuery.textContent = result.query;
+        resultAnswer.innerHTML = marked.parse(result.answer);
+        sourcesCount.textContent = sources.length;
+        generatedTime.textContent = `Generated at ${new Date(result.generatedAt).toLocaleString()}`;
+        
+        // Add sources to the list
+        sourcesList.innerHTML = '';
+        sources.forEach((source, index) => {
+          const sourceElement = document.createElement('div');
+          sourceElement.className = 'border-l-2 border-gray-200 pl-4';
+          
+          const title = document.createElement('h3');
+          title.className = 'font-medium text-gray-800';
+          title.textContent = source.title;
+          
+          sourceElement.appendChild(title);
+          
+          if (source.url) {
+            const link = document.createElement('a');
+            link.href = source.url;
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            link.className = 'citation block mb-1';
+            link.textContent = source.url;
+            sourceElement.appendChild(link);
+          }
+          
+          const snippet = document.createElement('p');
+          snippet.className = 'text-gray-600 text-sm';
+          snippet.textContent = source.snippet;
+          sourceElement.appendChild(snippet);
+          
+          const sourceInfo = document.createElement('div');
+          sourceInfo.className = 'text-xs text-gray-400 mt-1';
+          sourceInfo.textContent = `Source: ${source.source}`;
+          sourceElement.appendChild(sourceInfo);
+          
+          sourcesList.appendChild(sourceElement);
+        });
+        
+        // Show the result
+        resultContainer.classList.remove('hidden');
+      }
+
+      function showError(message) {
+        errorText.textContent = message;
+        errorMessage.classList.remove('hidden');
+        loadingIndicator.classList.add('hidden');
+        searchButton.disabled = false;
+      }
+
+      // Mock data for demonstration purposes
+      function getMockResult(query) {
+        return {
+          query: query,
+          answer: `# Research on "${query}"\n\nBased on the search results, this query involves multiple interesting perspectives. Here are the key findings:\n\n## Main Points\n- The topic has been extensively researched in recent years\n- Several different approaches have been proposed\n- Evidence suggests that further study is warranted\n\n## Conclusion\nWhile there is no definitive answer yet, the collected information provides valuable insights into this area of research.`,
+          sources: [
+            {
+              title: "Comprehensive Study on " + query,
+              url: "https://example.com/study1",
+              snippet: "This groundbreaking research explores various aspects of the topic with detailed analysis and insights.",
+              source: "perplexity",
+              relevanceScore: 0.95
+            },
+            {
+              title: "Recent Developments in " + query + " Research",
+              url: "https://example.org/recent-developments",
+              snippet: "Over the past few years, significant progress has been made in understanding the fundamental principles.",
+              source: "serper",
+              relevanceScore: 0.85
+            },
+            {
+              title: "Analysis of " + query + " Methodologies",
+              url: "https://example.net/analysis",
+              snippet: "A comparative study of different approaches and their effectiveness in various contexts.",
+              source: "perplexity",
+              relevanceScore: 0.82
+            }
+          ],
+          generatedAt: new Date().toISOString()
+        };
+      }
+    });
+  </script>
+</body>
+</html> 
