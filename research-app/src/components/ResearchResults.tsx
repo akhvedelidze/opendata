@@ -26,7 +26,22 @@ export default function ResearchResults({ result }: ResearchResultsProps) {
       <div className="mb-6">
         <div className="text-sm text-gray-500 mb-1">Answer</div>
         <div className="result-content">
-          <ReactMarkdown className="result-content">{answer}</ReactMarkdown>
+          <ReactMarkdown 
+            className="result-content"
+            components={{
+              // Enhanced styling for markdown elements
+              h1: ({node, ...props}) => <h1 {...props} className="text-2xl font-bold mb-4 mt-2 text-gray-800" />,
+              h2: ({node, ...props}) => <h2 {...props} className="text-xl font-semibold mb-3 mt-4 text-gray-700" />,
+              h3: ({node, ...props}) => <h3 {...props} className="text-lg font-medium mb-2 mt-3 text-gray-700" />,
+              p: ({node, ...props}) => <p {...props} className="mb-4" />,
+              ul: ({node, ...props}) => <ul {...props} className="list-disc pl-5 mb-4" />,
+              ol: ({node, ...props}) => <ol {...props} className="list-decimal pl-5 mb-4" />,
+              li: ({node, ...props}) => <li {...props} className="mb-1" />,
+              a: ({node, ...props}) => <a {...props} className="text-primary-600 hover:underline" target="_blank" rel="noopener noreferrer" />
+            }}
+          >
+            {answer}
+          </ReactMarkdown>
         </div>
       </div>
       
