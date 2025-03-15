@@ -1,0 +1,104 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Define empty prose classes to prevent errors */
+@layer components {
+  .prose {
+    /* Empty placeholder for prose */
+  }
+  .prose-lg {
+    /* Empty placeholder for prose-lg */
+  }
+}
+
+body {
+  @apply bg-gray-50;
+}
+
+.research-container {
+  @apply max-w-4xl mx-auto p-4;
+}
+
+.result-card {
+  @apply bg-white rounded-lg shadow-md p-6 my-4;
+}
+
+.search-input {
+  @apply w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent;
+}
+
+.button-primary {
+  @apply bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-colors;
+}
+
+.loading-spinner {
+  @apply animate-spin h-5 w-5 text-primary-600;
+}
+
+.citation {
+  @apply text-sm text-gray-600 hover:underline;
+}
+
+.result-heading {
+  @apply text-2xl font-bold mb-4 text-gray-800;
+}
+
+/* Replace prose with custom styling */
+.result-content {
+  @apply text-gray-800 leading-relaxed max-w-none;
+  font-size: 1.125rem;
+  line-height: 1.75;
+}
+
+/* Typography styles */
+.result-content h1 {
+  font-size: 2.25rem;
+  font-weight: 800;
+  margin-top: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.result-content h2 {
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin-top: 1.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.result-content h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.result-content p {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.result-content a {
+  color: #0284c7;
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.result-content ul, .result-content ol {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+  padding-left: 2rem;
+}
+
+.result-content ul {
+  list-style-type: disc;
+}
+
+.result-content ol {
+  list-style-type: decimal;
+}
+
+.result-content li {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+} 
